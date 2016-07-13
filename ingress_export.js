@@ -146,7 +146,28 @@ function wrapper() {
 
     };
 
+
+
+    self.generateCsvData = function() {
+        var csvData = 'Name, Latitude, Longitude, Image' + "\n";
+        $.each(window.master_portal_list, function(key, value) {
+            csvData += (value + "\n");
+        });
+
+        return csvData;
+    };
+
+    self.downloadCSV = function() {
+        var csvData = self.generateCsvData();
+        var link = document.createElement("a");
+        link.download = 'Portal_Export.csv';
+        link.href = "data:text/csv," + escape(csvData);
+        link.click();
+    }
+
     self.showDialog = function showDialog(o) {
+        var csvData = self.generateCsvData();
+
         var data = `
         <form name='maxfield' action='#' method='post' target='_blank'>
             <div class="row">
@@ -155,11 +176,12 @@ function wrapper() {
                         name='portal_list_area'
                         rows='30'
                         placeholder='Zoom level must be 15 or higher for portal data to load'
-                        style="width: 100%; white-space: nowrap;">${'Name, Latitude, Longitude, Image' + "\n" + o.join("\n")}</textarea>
+                        style="width: 100%; white-space: nowrap;">${csvData}</textarea>
                 </div>
             </div>
         </form>
-        `;
+        `;        
+
         var dia = window.dialog({
             title: "Portal CSV Export",
             html: data
@@ -170,8 +192,7 @@ function wrapper() {
     };
 
     self.gen = function gen() {
-        var o = self.checkPortals(window.portals);
-        var dialog = self.showDialog(o.list);
+        var dialog = self.showDialog(window.master_portal_list);
         return dialog;
     };
 
@@ -192,10 +213,14 @@ function wrapper() {
         self.updateZoomStatus();
         if (window.map.getZoom() == 15) {
             if ($('#innerstatus > span.map > span').html() === 'done') {
-                console.log('Ready to capture');
+                self.checkPortals(window.portals);
             }
         }
     };
+
+    self.panMap = function() {
+        window.map.panTo({lat: 40.974379, lng: -85.624982});
+    }
 
     // setup function called by IITC
     self.setup = function init() {
@@ -217,7 +242,8 @@ function wrapper() {
             </div>
 
             <div id="csvControlsBox" style="margin-top: 5px; padding: 5px 0 5px 5px; border-top: 1px solid #20A8B1;">
-                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.gen();" title="Generate a CSV list of portals.">Portal List CSV</a>            
+                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.gen();" title="View the CSV portal data.">View Data</a>            
+                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.downloadCSV();" title="Download the CSV portal data.">Download CSV</a>            
             </div>            
         </div>
         `;
