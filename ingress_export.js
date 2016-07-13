@@ -26,7 +26,7 @@ function wrapper() {
     window.plugin.portal_csv_export = function() {};
     var self = window.plugin.portal_csv_export;
 
-    self.master_portal_list = {};
+    window.master_portal_list = {};
 
     self.portalInScreen = function portalInScreen(p) {
         return map.getBounds().contains(p.getLatLng());
@@ -113,13 +113,10 @@ function wrapper() {
     };
 
     self.addPortalToExportList = function(portalStr, portalGuid) {
-        if (typeof self.master_portal_list[portalGuid] == 'undefined') {
-            console.log(true);
-            self.master_portal_list[portalGuid] = portalStr;
-        } else {
-            console.log(false);
+        if (typeof window.master_portal_list[portalGuid] == 'undefined') {
+            window.master_portal_list[portalGuid] = portalStr;
         }
-    }
+    };
 
     self.managePortals = function managePortals(obj, portal, x) {
         if (self.inBounds(portal)) {
@@ -179,8 +176,18 @@ function wrapper() {
     // setup function called by IITC
     self.setup = function init() {
         // add controls to toolbox
-        var link = $("<a onclick=\"window.plugin.portal_csv_export.gen();\" title=\"Generate a CSV list of portals.\">Portal List CSV</a>");
+        var link = $("");
         $("#toolbox").append(link);
+
+        var csvToolbox = `
+        <div id="csvToolbox" style="padding:5px;">
+            <p style="margin: 0; text-align: center;">Portal CSV Exporter</p>
+            <a style="margin: 0 5px 0 5px;" onclick="window.map.setZoom(15);" title="Set zoom level to enable portal data download.">Set Zoom Level</a>
+            <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.gen();" title="Generate a CSV list of portals.">Portal List CSV</a>
+        </div>
+        `;
+
+        $(csvToolbox).insertAfter('#toolbox');
         // delete self to ensure init can't be run again
         delete self.init;
     };
