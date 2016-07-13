@@ -26,6 +26,8 @@ function wrapper() {
     window.plugin.portal_csv_export = function() {};
     var self = window.plugin.portal_csv_export;
 
+    self.master_portal_list = {};
+
     self.portalInScreen = function portalInScreen(p) {
         return map.getBounds().contains(p.getLatLng());
     };
@@ -87,13 +89,13 @@ function wrapper() {
             return self.portalInScreen(portal);
         }
     };
-    self.genStr = function genStr(title, lat, lng, portalGuid) {
+    self.genStr = function genStr(title, image, lat, lng, portalGuid) {
         var href = lat + "," + lng;
         var str= "";
         str = title;
         str = str.replace(/\"/g, "\\\"");
         str = str.replace(";", " ");
-        str = str + ", " + href;
+        str = str + ", " + href + ", " + image;
         if (window.plugin.keys && (typeof window.portals[portalGuid] !== "undefined")) {
             var keyCount =window.plugin.keys.keys[portalGuid] || 0;
             str = str + ";" + keyCount;
@@ -105,8 +107,9 @@ function wrapper() {
         var lat = portal._latlng.lat,
             lng = portal._latlng.lng,
             title = portal.options.data.title || "untitled portal";
+            image = portal.options.data.image || ""
 
-        return self.genStr(title, lat, lng, portalGuid);
+        return self.genStr(title, image, lat, lng, portalGuid);
     };
 
     self.managePortals = function managePortals(obj, portal, x) {
@@ -165,7 +168,7 @@ function wrapper() {
                         name='portal_list_area'
                         rows='30'
                         placeholder='Zoom level must be 15 or higher for portal data to load'
-                        style="width: 100%; white-space: nowrap;">${'Name, Latitude, Longitude' + "\n" + o.join("\n")}</textarea>
+                        style="width: 100%; white-space: nowrap;">${'Name, Latitude, Longitude, Image' + "\n" + o.join("\n")}</textarea>
                 </div>
             </div>
         </form>
@@ -182,7 +185,6 @@ function wrapper() {
     self.gen = function gen() {
         var o = self.checkPortals(window.portals);
         var dialog = self.showDialog(o.list);
-        console.log(o.list);
         return dialog;
     };
 
