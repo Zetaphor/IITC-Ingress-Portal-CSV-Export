@@ -82,7 +82,7 @@ function wrapper() {
     };
     self.inBounds = function(portal) {
         if (window.plugin.drawTools && window.plugin.drawTools.drawnItems.getLayers().length) {
-            return self.portalInDrawnItems(portal);https://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export
+            return self.portalInDrawnItems(portal);
         } else {
             return self.portalInScreen(portal);
         }
@@ -135,7 +135,7 @@ function wrapper() {
 
     // Return markup for the bookmarks to show in the IMF dialog
     self.renderPortalBookmarkFolders = function renderPortalBookmarkFolder(folders) {
-        var data = "<p>With Portal Bookmarks, you can populate the list with a folder you have created instead:</p>";
+        var data = '';
 
         for (var folder in folders) {
             if (folders.hasOwnProperty(folder)) {
@@ -178,9 +178,9 @@ function wrapper() {
 
     self.showDialog = function showDialog(o, b) {
         var data = `
-        <form name='maxfield' action='http://www.ingress-maxfield.com/submit.php' enctype='multipart/form-data' method='post' target='_blank'>
+        <form name='maxfield' action='#' method='post' target='_blank'>
             <div class="row">
-                <div id='form_area' class="column" style="float:left;width:80%;box-sizing: border-box;padding-right: 10px;">
+                <div id='form_area' class="column" style="float:left;width:100%;box-sizing: border-box;padding-right: 5px;">
                     <textarea class='form_area'
                         name='portal_list_area'
                         rows='30'
@@ -191,68 +191,10 @@ function wrapper() {
                     ${self.renderPortalBookmarkFolders(b)}
                 </div>
             </div>
-            <div id='form_part2'>
-                <div id='file_upload'>
-                    <br/>
-                    <label class='upload_button' hidden>
-                        <span>
-                            <input id='hidden' type='file' name='portal_list'>
-                        </span>
-                    </label>
-                    <input type='hidden' id='path' placeholder='No file selected' disabled>
-                </div>
-                <div id='num_agents'>
-                    <table width='100%'>
-                        <tr>
-                            <td width='50%'>
-                                Number of agents:
-                            </td>
-                            <td width='50%'>
-                                <input type='number' class='num_agents' name='num_agents' value='1' min='1' required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Use Google Maps?
-                            </td>
-                            <td>
-                                <input type='checkbox' name='useGoogle' value='YES' checked>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Color scheme
-                            </td>
-                            <td>
-                                <input type='radio' name='color' value='ENL' checked>ENL</input>
-                                <input type='radio' name='color' value='RES'>RES</input>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div id='submit'>
-                    <table>
-                        <tr>
-                            <td>
-                                Email:
-                            </td>
-                            <td>
-                                <input type='email' name='email' placeholder='(optional)'>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <input type='submit' class='submit' name='submit' value='Submit!'>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
         </form>
         `;
         var dia = window.dialog({
-            title: "www.ingress-maxfield.com: Field your future",
+            title: "Portal CSV Export",
             html: data
         }).parent();
         $(".ui-dialog-buttonpane", dia).remove();
@@ -287,7 +229,7 @@ function wrapper() {
     // setup function called by IITC
     self.setup = function init() {
         // add controls to toolbox
-        var link = $("<a onclick=\"window.plugin.ingressmaxfield.gen();\" title=\"Generate a CSV list of portals and locations for use with www.ingress-maxfield.com.\">Portal List CSV</a>");
+        var link = $("<a onclick=\"window.plugin.ingressmaxfield.gen();\" title=\"Generate a CSV list of portals.\">Portal List CSV</a>");
         $("#toolbox").append(link);
         // delete self to ensure init can't be run again
         delete self.init;
