@@ -156,13 +156,6 @@ function wrapper() {
         return data;
     };
 
-
-    // Write a list of all portal bookmarks to the text area
-    self.appendBookmarkFolder = function appendBookmarkFolder(folder) {
-        var $form = $("form[name='maxfield'] textarea");
-        $form.val(self.genStrFromBookmarkFolder(folder));
-    };
-
     self.showDialog = function showDialog(o) {
         var data = `
         <form name='maxfield' action='#' method='post' target='_blank'>
