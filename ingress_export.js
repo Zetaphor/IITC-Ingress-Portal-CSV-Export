@@ -23,8 +23,8 @@ function wrapper() {
     }
 
     // base context for plugin
-    window.plugin.ingressmaxfield = function() {};
-    var self = window.plugin.ingressmaxfield;
+    window.plugin.portal_csv_export = function() {};
+    var self = window.plugin.portal_csv_export;
 
     self.portalInScreen = function portalInScreen(p) {
         return map.getBounds().contains(p.getLatLng());
@@ -133,19 +133,6 @@ function wrapper() {
 
     };
 
-    // Return markup for the bookmarks to show in the IMF dialog
-    self.renderPortalBookmarkFolders = function renderPortalBookmarkFolder(folders) {
-        var data = '';
-
-        for (var folder in folders) {
-            if (folders.hasOwnProperty(folder)) {
-                data += `<div onClick='window.plugin.ingressmaxfield.appendBookmarkFolder("${folder}");'>${folders[folder]}</div>`;
-            }
-        }
-
-        return data;
-    };
-
     // Generate string for given bookmarked portal
     self.genStrFromBookmarkPortal = function genStrFromBookmarkPortal(portalId, folder) {
         var portalsList = JSON.parse(localStorage["plugin-bookmarks"]);
@@ -176,7 +163,7 @@ function wrapper() {
         $form.val(self.genStrFromBookmarkFolder(folder));
     };
 
-    self.showDialog = function showDialog(o, b) {
+    self.showDialog = function showDialog(o) {
         var data = `
         <form name='maxfield' action='#' method='post' target='_blank'>
             <div class="row">
@@ -184,11 +171,8 @@ function wrapper() {
                     <textarea class='form_area'
                         name='portal_list_area'
                         rows='30'
-                        placeholder='Copy and paste portal list here OR upload portal list file below. Proper formatting guidelines can be found in the instructions.  Anything after a # is considered a comment and will be ignored - be sure to remove any # or ; that appear in a portal name. Each portal should start on a new line.'
+                        placeholder='Zoom level must be 15 or higher for portal data to load'
                         style="width: 100%; white-space: nowrap;">${o.join("\n")}</textarea>
-                </div>
-                <div class="column" style="float:left;width:20%;">
-                    ${self.renderPortalBookmarkFolders(b)}
                 </div>
             </div>
         </form>
@@ -204,32 +188,14 @@ function wrapper() {
 
     self.gen = function gen() {
         var o = self.checkPortals(window.portals);
-        var bookmarks = self.checkBookmarks();
-        var dialog = self.showDialog(o.list, bookmarks);
+        var dialog = self.showDialog(o.list);
         return dialog;
-    };
-
-    // Return a list of portal bookmark folders
-    self.checkBookmarks = function checkBookmarks() {
-        if (!window.plugin.bookmarks) {
-            return null;
-        }
-
-        var portalsList = JSON.parse(localStorage["plugin-bookmarks"]);
-
-        var res = {};
-        for (var folder in portalsList.portals) {
-            if (portalsList.portals.hasOwnProperty(folder)) {
-                res[folder] = portalsList.portals[folder].label;
-            }
-        }
-        return res;
     };
 
     // setup function called by IITC
     self.setup = function init() {
         // add controls to toolbox
-        var link = $("<a onclick=\"window.plugin.ingressmaxfield.gen();\" title=\"Generate a CSV list of portals.\">Portal List CSV</a>");
+        var link = $("<a onclick=\"window.plugin.portal_csv_export.gen();\" title=\"Generate a CSV list of portals.\">Portal List CSV</a>");
         $("#toolbox").append(link);
         // delete self to ensure init can't be run again
         delete self.init;
