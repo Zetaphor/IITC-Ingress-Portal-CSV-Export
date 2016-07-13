@@ -112,15 +112,26 @@ function wrapper() {
         return self.genStr(title, image, lat, lng, portalGuid);
     };
 
+    self.addPortalToExportList = function(portalStr, portalGuid) {
+        if (typeof self.master_portal_list[portalGuid] == 'undefined') {
+            console.log(true);
+            self.master_portal_list[portalGuid] = portalStr;
+        } else {
+            console.log(false);
+        }
+    }
+
     self.managePortals = function managePortals(obj, portal, x) {
         if (self.inBounds(portal)) {
             var str = self.genStrFromPortal(portal, x);
             obj.list.push(str);
             obj.count += 1;
+            self.addPortalToExportList(str, x);
         }
         return obj;
 
     };
+
     self.checkPortals = function checkPortals(portals) {
         var obj = {
             list: [],
