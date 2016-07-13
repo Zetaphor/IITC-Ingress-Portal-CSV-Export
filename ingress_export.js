@@ -136,29 +136,6 @@ function wrapper() {
 
     };
 
-    // Generate string for given bookmarked portal
-    self.genStrFromBookmarkPortal = function genStrFromBookmarkPortal(portalId, folder) {
-        var portalsList = JSON.parse(localStorage["plugin-bookmarks"]);
-        var portal = portalsList.portals[folder]["bkmrk"][portalId];
-        var latlng = portal.latlng.split(",");
-
-        return self.genStr(portal.label, latlng[0], latlng[1], portal.guid);
-    };
-
-    // Generate string for all the portals
-    self.genStrFromBookmarkFolder = function genStrFromBookmarkFolder(folder) {
-        var data = "",
-            portalsList = JSON.parse(localStorage["plugin-bookmarks"]);
-
-        for (var portal in portalsList.portals[folder]["bkmrk"]) {
-            if (portalsList.portals[folder]["bkmrk"].hasOwnProperty(portal)) {
-                data += self.genStrFromBookmarkPortal(portal, folder) + "\n";
-            }
-        }
-
-        return data;
-    };
-
     self.showDialog = function showDialog(o) {
         var data = `
         <form name='maxfield' action='#' method='post' target='_blank'>
