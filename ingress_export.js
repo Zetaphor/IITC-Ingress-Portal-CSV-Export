@@ -165,7 +165,7 @@ function wrapper() {
                         name='portal_list_area'
                         rows='30'
                         placeholder='Zoom level must be 15 or higher for portal data to load'
-                        style="width: 100%; white-space: nowrap;">${o.join("\n")}</textarea>
+                        style="width: 100%; white-space: nowrap;">${'Name, Latitude, Longitude' + "\n" + o.join("\n")}</textarea>
                 </div>
             </div>
         </form>
@@ -182,6 +182,7 @@ function wrapper() {
     self.gen = function gen() {
         var o = self.checkPortals(window.portals);
         var dialog = self.showDialog(o.list);
+        console.log(o.list);
         return dialog;
     };
 
