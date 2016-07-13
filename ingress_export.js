@@ -1,11 +1,11 @@
 // ==UserScript==
 // @id iitc-plugin-ingressportalcsvexport@zetaphor
-// @name IITC plugin: Ingress Portal CSV Export
+// @name IITC Plugin: Ingress Portal CSV Export
 // @category Information
 // @version 0.0.1
-// @namespace http://github.com/jonatkins/ingress-intel-total-conversion
-// @updateURL https://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/raw/master/ingress_export.js
-// @downloadURL https://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/raw/master/ingress_export.js
+// @namespace http://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export
+// @updateURL http://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/raw/master/ingress_export.js
+// @downloadURL http://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/raw/master/ingress_export.js
 // @description Exports portals to a CSV list
 // @include https://www.ingress.com/intel*
 // @include http://www.ingress.com/intel*
@@ -121,6 +121,25 @@ function wrapper() {
         }
     };
 
+    self.drawRectangle = function() {
+        var bounds = window.map.getBounds();
+
+        var rectangle = new google.maps.Rectangle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: window.map,
+            bounds: {
+                north: bounds._northEast.lat,
+                south: bounds._southWest.lat,
+                east: bounds._northEast.lng,
+                west: bounds._southWest.lng,
+            }
+        });
+    };
+
     self.managePortals = function managePortals(obj, portal, x) {
         if (self.inBounds(portal)) {
             var str = self.genStrFromPortal(portal, x);
@@ -128,6 +147,7 @@ function wrapper() {
             obj.count += 1;
             self.addPortalToExportList(str, x);
         }
+        self.drawRectangle();
         return obj;
 
     };
@@ -204,7 +224,10 @@ function wrapper() {
     self.updateZoomStatus = function() {
         var zoomLevel = window.map.getZoom();
         $('#currentZoomLevel').html(window.map.getZoom());
-        if (zoomLevel != 15) $('#currentZoomLevel').css('color', 'red');
+        if (zoomLevel != 15) {
+            $('#currentZoomLevel').css('color', 'red');
+            if (window.portal_scraper_enabled) $('#scraperStatus').html('Invalid Zoom Level').css('color', 'yellow');   
+        }
         else $('#currentZoomLevel').css('color', 'green');
     };
 
@@ -214,6 +237,9 @@ function wrapper() {
             if (window.map.getZoom() == 15) {
                 if ($('#innerstatus > span.map > span').html() === 'done') {
                     self.checkPortals(window.portals);
+                    $('#scraperStatus').html('Running').css('color', 'green');
+                } else {
+                    $('#scraperStatus').html('Waiting For Map Data').css('color', 'yellow');
                 }
             }
         }
