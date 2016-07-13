@@ -27,6 +27,7 @@ function wrapper() {
     var self = window.plugin.portal_csv_export;
 
     window.master_portal_list = {};
+    window.portal_scraper_enabled = false;
 
     self.portalInScreen = function portalInScreen(p) {
         return map.getBounds().contains(p.getLatLng());
@@ -146,8 +147,6 @@ function wrapper() {
 
     };
 
-
-
     self.generateCsvData = function() {
         var csvData = 'Name, Latitude, Longitude, Image' + "\n";
         $.each(window.master_portal_list, function(key, value) {
@@ -180,7 +179,7 @@ function wrapper() {
                 </div>
             </div>
         </form>
-        `;        
+        `;
 
         var dia = window.dialog({
             title: "Portal CSV Export",
@@ -211,16 +210,33 @@ function wrapper() {
 
     self.updateTimer = function() {
         self.updateZoomStatus();
-        if (window.map.getZoom() == 15) {
-            if ($('#innerstatus > span.map > span').html() === 'done') {
-                self.checkPortals(window.portals);
+        if (window.portal_scraper_enabled) {
+            if (window.map.getZoom() == 15) {
+                if ($('#innerstatus > span.map > span').html() === 'done') {
+                    self.checkPortals(window.portals);
+                }
             }
         }
     };
 
     self.panMap = function() {
-        window.map.getBounds();        
+        window.map.getBounds();
         window.map.panTo({lat: 40.974379, lng: -85.624982});
+    }
+
+    self.toggleStatus = function() {
+        if (window.portal_scraper_enabled) {
+            window.portal_scraper_enabled = false;
+            $('#scraperStatus').html('Stopped').css('color', 'red');
+            $('#startScraper').show();
+            $('#stopScraper').hide();
+        } else {
+            window.portal_scraper_enabled = true;
+            $('#scraperStatus').html('Running').css('color', 'green');
+            $('#startScraper').hide();
+            $('#stopScraper').show();
+        }
+
     }
 
     // setup function called by IITC
@@ -230,22 +246,23 @@ function wrapper() {
         $("#toolbox").append(link);
 
         var csvToolbox = `
-        <div id="csvToolbox">
-            <p style="margin: 5px 0 5px 0; text-align: center; font-weight: bold;">Portal CSV Exporter</p>        
+        <div id="csvToolbox" style="position: relative;">
+            <p style="margin: 5px 0 5px 0; text-align: center; font-weight: bold;">Portal CSV Exporter</p>
+            <a id="startScraper" style="position: absolute; top: 0; left: 0; margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.toggleStatus();" title="Start the portal data scraper">Start</a>
+            <a id="stopScraper" style="position: absolute; top: 0; left: 0; display: none; margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.toggleStatus();" title="Stop the portal data scraper">Stop</a>
 
             <div class="zoomControlsBox" style="margin-top: 5px; padding: 5px 0 5px 5px;">
                 Current Zoom Level: <span id="currentZoomLevel">0</span>
-                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.setZoomLevel();" title="Set zoom level to enable portal data download.">Set Zoom Level</a>                
-            </div>            
-
-            <div id="csvTotalBox" style="padding: 0 0 5px 5px">
-                Total Portals Scraped: <span id="totalScrapedPortals">0</span>
+                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.setZoomLevel();" title="Set zoom level to enable portal data download.">Set Zoom Level</a>
             </div>
 
+            <p style="margin:0 0 0 5px;">Scraper Status: <span style="color: red;" id="scraperStatus">Stopped</span></p>
+            <p style="margin:0 0 0 5px;">Total Portals Scraped: <span id="totalScrapedPortals">0</span></p>
+
             <div id="csvControlsBox" style="margin-top: 5px; padding: 5px 0 5px 5px; border-top: 1px solid #20A8B1;">
-                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.gen();" title="View the CSV portal data.">View Data</a>            
-                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.downloadCSV();" title="Download the CSV portal data.">Download CSV</a>            
-            </div>            
+                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.gen();" title="View the CSV portal data.">View Data</a>
+                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.downloadCSV();" title="Download the CSV portal data.">Download CSV</a>
+            </div>
         </div>
         `;
 
