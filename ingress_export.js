@@ -1,12 +1,12 @@
 // ==UserScript==
-// @id iitc-plugin-ingressportalexport@stenyg
-// @name IITC plugin: Ingress Portal Export
+// @id iitc-plugin-ingressportalcsvexport@zetaphor
+// @name IITC plugin: Ingress Portal CSV Export
 // @category Information
-// @version 0.1.7.0
+// @version 0.0.1
 // @namespace http://github.com/jonatkins/ingress-intel-total-conversion
-// @updateURL http://github.com/itayo/IITC-Ingress-Maxfields-Exporter/raw/master/IngressMaxFields.user.js
-// @downloadURL http://github.com/itayo/IITC-Ingress-Maxfields-Exporter/raw/master/IngressMaxFields.user.js
-// @description Exports portals in the format for http://www.ingress-maxfield.com/ and allow direct transfer to site
+// @updateURL https://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/raw/master/ingress_export.js
+// @downloadURL https://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/raw/master/ingress_export.js
+// @description Exports portals to a CSV list
 // @include https://www.ingress.com/intel*
 // @include http://www.ingress.com/intel*
 // @match https://www.ingress.com/intel*
@@ -82,7 +82,7 @@ function wrapper() {
     };
     self.inBounds = function(portal) {
         if (window.plugin.drawTools && window.plugin.drawTools.drawnItems.getLayers().length) {
-            return self.portalInDrawnItems(portal);
+            return self.portalInDrawnItems(portal);https://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export
         } else {
             return self.portalInScreen(portal);
         }
