@@ -115,6 +115,8 @@ function wrapper() {
     self.addPortalToExportList = function(portalStr, portalGuid) {
         if (typeof window.master_portal_list[portalGuid] == 'undefined') {
             window.master_portal_list[portalGuid] = portalStr;
+            var totalScrapedPortals = parseInt($('#totalScrapedPortals').html())
+            $('#totalScrapedPortals').html(totalScrapedPortals + 1);
         }
     };
 
@@ -173,6 +175,28 @@ function wrapper() {
         return dialog;
     };
 
+    self.setZoomLevel = function() {
+        window.map.setZoom(15);
+        $('#currentZoomLevel').html('15');
+        self.updateZoomStatus();
+    };
+
+    self.updateZoomStatus = function() {
+        var zoomLevel = window.map.getZoom();
+        $('#currentZoomLevel').html(window.map.getZoom());
+        if (zoomLevel != 15) $('#currentZoomLevel').css('color', 'red');
+        else $('#currentZoomLevel').css('color', 'green');
+    }
+
+    self.updateTimer = function() {
+        self.updateZoomStatus();
+        if (window.map.getZoom() == 15) {
+            if ($('#innerstatus > span.map > span').html() === 'done') {
+                console.log('Ready to capture');
+            }
+        }
+    };
+
     // setup function called by IITC
     self.setup = function init() {
         // add controls to toolbox
@@ -180,14 +204,28 @@ function wrapper() {
         $("#toolbox").append(link);
 
         var csvToolbox = `
-        <div id="csvToolbox" style="padding:5px;">
-            <p style="margin: 0; text-align: center;">Portal CSV Exporter</p>
-            <a style="margin: 0 5px 0 5px;" onclick="window.map.setZoom(15);" title="Set zoom level to enable portal data download.">Set Zoom Level</a>
-            <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.gen();" title="Generate a CSV list of portals.">Portal List CSV</a>
+        <div id="csvToolbox">
+            <p style="margin: 5px 0 5px 0; text-align: center; font-weight: bold;">Portal CSV Exporter</p>        
+
+            <div class="zoomControlsBox" style="margin-top: 5px; padding: 5px 0 5px 5px;">
+                Current Zoom Level: <span id="currentZoomLevel">0</span>
+                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.setZoomLevel();" title="Set zoom level to enable portal data download.">Set Zoom Level</a>                
+            </div>            
+
+            <div id="csvTotalBox" style="padding: 0 0 5px 5px">
+                Total Portals Scraped: <span id="totalScrapedPortals">0</span>
+            </div>
+
+            <div id="csvControlsBox" style="margin-top: 5px; padding: 5px 0 5px 5px; border-top: 1px solid #20A8B1;">
+                <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.gen();" title="Generate a CSV list of portals.">Portal List CSV</a>            
+            </div>            
         </div>
         `;
 
         $(csvToolbox).insertAfter('#toolbox');
+
+        window.csvUpdateTimer = window.setInterval(self.updateTimer, 800);
+
         // delete self to ensure init can't be run again
         delete self.init;
     };
