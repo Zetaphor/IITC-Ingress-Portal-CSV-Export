@@ -206,7 +206,7 @@ function wrapper() {
         $('#currentZoomLevel').html(window.map.getZoom());
         if (zoomLevel != 15) $('#currentZoomLevel').css('color', 'red');
         else $('#currentZoomLevel').css('color', 'green');
-    }
+    };
 
     self.updateTimer = function() {
         self.updateZoomStatus();
@@ -222,7 +222,7 @@ function wrapper() {
     self.panMap = function() {
         window.map.getBounds();
         window.map.panTo({lat: 40.974379, lng: -85.624982});
-    }
+    };
 
     self.toggleStatus = function() {
         if (window.portal_scraper_enabled) {
@@ -230,14 +230,18 @@ function wrapper() {
             $('#scraperStatus').html('Stopped').css('color', 'red');
             $('#startScraper').show();
             $('#stopScraper').hide();
+            $('#csvControlsBox').hide();
+            $('#totalPortals').hide();
         } else {
             window.portal_scraper_enabled = true;
             $('#scraperStatus').html('Running').css('color', 'green');
             $('#startScraper').hide();
             $('#stopScraper').show();
+            $('#csvControlsBox').show();
+            $('#totalPortals').show();
         }
 
-    }
+    };
 
     // setup function called by IITC
     self.setup = function init() {
@@ -257,9 +261,9 @@ function wrapper() {
             </div>
 
             <p style="margin:0 0 0 5px;">Scraper Status: <span style="color: red;" id="scraperStatus">Stopped</span></p>
-            <p style="margin:0 0 0 5px;">Total Portals Scraped: <span id="totalScrapedPortals">0</span></p>
+            <p id="totalPortals" style="display: none; margin:0 0 0 5px;">Total Portals Scraped: <span id="totalScrapedPortals">0</span></p>
 
-            <div id="csvControlsBox" style="margin-top: 5px; padding: 5px 0 5px 5px; border-top: 1px solid #20A8B1;">
+            <div id="csvControlsBox" style="display: none; margin-top: 5px; padding: 5px 0 5px 5px; border-top: 1px solid #20A8B1;">
                 <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.gen();" title="View the CSV portal data.">View Data</a>
                 <a style="margin: 0 5px 0 5px;" onclick="window.plugin.portal_csv_export.downloadCSV();" title="Download the CSV portal data.">Download CSV</a>
             </div>
