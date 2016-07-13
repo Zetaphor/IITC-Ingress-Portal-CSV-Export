@@ -219,6 +219,7 @@ function wrapper() {
     };
 
     self.panMap = function() {
+        window.map.getBounds();        
         window.map.panTo({lat: 40.974379, lng: -85.624982});
     }
 
