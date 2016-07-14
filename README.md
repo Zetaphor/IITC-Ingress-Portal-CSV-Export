@@ -10,6 +10,9 @@ The scraper will not download any portal data until the current map view has fin
 
 Once map data has loaded and the viewport has been scraped, a green rectangle is drawn over the viewport boundaries on the map. This makes it easier to pan around and capture large areas (due to the zoom restriction) while keeping track of what has already been captured.
 
+### Contributing
+Pull requests and issues are welcome.
+
 #### Credit
 This project started as a simple modification to the [IITC Maxfields Exporter](http://github.com/itayo/IITC-Ingress-Maxfields-Exporter) plugin by [itayo](http://github.com/itayo).
 
