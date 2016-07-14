@@ -28,6 +28,7 @@ function wrapper() {
 
     window.master_portal_list = {};
     window.portal_scraper_enabled = false;
+    window.current_area_scraped = false;
 
     self.portalInScreen = function portalInScreen(p) {
         return map.getBounds().contains(p.getLatLng());
@@ -116,28 +117,19 @@ function wrapper() {
     self.addPortalToExportList = function(portalStr, portalGuid) {
         if (typeof window.master_portal_list[portalGuid] == 'undefined') {
             window.master_portal_list[portalGuid] = portalStr;
-            var totalScrapedPortals = parseInt($('#totalScrapedPortals').html())
-            $('#totalScrapedPortals').html(totalScrapedPortals + 1);
+            // var totalScrapedPortals = parseInt($('#totalScrapedPortals').html())
+            self.updateTotalScrapedCount()
         }
+    };
+
+    self.updateTotalScrapedCount = function() {
+        $('#totalScrapedPortals').html(Object.keys(window.master_portal_list).length);
     };
 
     self.drawRectangle = function() {
         var bounds = window.map.getBounds();
-
-        var rectangle = new google.maps.Rectangle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35,
-            map: window.map,
-            bounds: {
-                north: bounds._northEast.lat,
-                south: bounds._southWest.lat,
-                east: bounds._northEast.lng,
-                west: bounds._southWest.lng,
-            }
-        });
+        var bounds = [[bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]];
+        L.rectangle(bounds, {color: "#00ff11", weight: 1, opacity: 0.9}).addTo(window.map);
     };
 
     self.managePortals = function managePortals(obj, portal, x) {
@@ -147,7 +139,6 @@ function wrapper() {
             obj.count += 1;
             self.addPortalToExportList(str, x);
         }
-        self.drawRectangle();
         return obj;
 
     };
@@ -225,8 +216,9 @@ function wrapper() {
         var zoomLevel = window.map.getZoom();
         $('#currentZoomLevel').html(window.map.getZoom());
         if (zoomLevel != 15) {
+            window.current_area_scraped = false;
             $('#currentZoomLevel').css('color', 'red');
-            if (window.portal_scraper_enabled) $('#scraperStatus').html('Invalid Zoom Level').css('color', 'yellow');   
+            if (window.portal_scraper_enabled) $('#scraperStatus').html('Invalid Zoom Level').css('color', 'yellow');
         }
         else $('#currentZoomLevel').css('color', 'green');
     };
@@ -236,9 +228,16 @@ function wrapper() {
         if (window.portal_scraper_enabled) {
             if (window.map.getZoom() == 15) {
                 if ($('#innerstatus > span.map > span').html() === 'done') {
-                    self.checkPortals(window.portals);
-                    $('#scraperStatus').html('Running').css('color', 'green');
+                    if (!window.current_area_scraped) {
+                        self.checkPortals(window.portals);
+                        window.current_area_scraped = true;
+                        $('#scraperStatus').html('Running').css('color', 'green');
+                        self.drawRectangle();
+                    } else {
+                        $('#scraperStatus').html('Area Scraped').css('color', 'green');
+                    }
                 } else {
+                    current_area_scraped = false;
                     $('#scraperStatus').html('Waiting For Map Data').css('color', 'yellow');
                 }
             }
@@ -265,6 +264,7 @@ function wrapper() {
             $('#stopScraper').show();
             $('#csvControlsBox').show();
             $('#totalPortals').show();
+            self.updateTotalScrapedCount();
         }
 
     };
@@ -298,7 +298,7 @@ function wrapper() {
 
         $(csvToolbox).insertAfter('#toolbox');
 
-        window.csvUpdateTimer = window.setInterval(self.updateTimer, 800);
+        window.csvUpdateTimer = window.setInterval(self.updateTimer, 500);
 
         // delete self to ensure init can't be run again
         delete self.init;
