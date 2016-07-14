@@ -13,3 +13,5 @@ Once map data has loaded and the viewport has been scraped, a green rectangle is
 #### Credit
 This project started as a simple modification to the [IITC Maxfields Exporter](http://github.com/itayo/IITC-Ingress-Maxfields-Exporter) plugin by [itayo](http://github.com/itayo).
 
+### Disclaimer
+I am in no way affiliated with Niantic.
