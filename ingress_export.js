@@ -84,6 +84,7 @@ function wrapper() {
         });
         return c;
     };
+
     self.inBounds = function(portal) {
         if (window.plugin.drawTools && window.plugin.drawTools.drawnItems.getLayers().length) {
             return self.portalInDrawnItems(portal);
@@ -91,6 +92,7 @@ function wrapper() {
             return self.portalInScreen(portal);
         }
     };
+
     self.genStr = function genStr(title, image, lat, lng, portalGuid) {
         var href = lat + "," + lng;
         var str= "";
@@ -117,7 +119,6 @@ function wrapper() {
     self.addPortalToExportList = function(portalStr, portalGuid) {
         if (typeof window.master_portal_list[portalGuid] == 'undefined') {
             window.master_portal_list[portalGuid] = portalStr;
-            // var totalScrapedPortals = parseInt($('#totalScrapedPortals').html())
             self.updateTotalScrapedCount()
         }
     };
@@ -154,8 +155,6 @@ function wrapper() {
             }
         }
         return obj;
-
-
     };
 
     self.generateCsvData = function() {
