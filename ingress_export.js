@@ -11,6 +11,8 @@
 // @include http://www.ingress.com/intel*
 // @include https://ingress.com/intel*
 // @include http://ingress.com/intel*
+// @include https://intel.ingress.com/intel*
+// @include http://intel.ingress.com/intel*
 // @match https://www.ingress.com/intel*
 // @match http://www.ingress.com/intel*
 // @match https://ingress.com/intel*
