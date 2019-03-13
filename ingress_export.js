@@ -4,8 +4,8 @@
 // @category Information
 // @version 0.0.1
 // @namespace http://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export
-// @updateURL http://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/raw/master/ingress_export.js
-// @downloadURL http://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/raw/master/ingress_export.js
+// @updateURL https://raw.githubusercontent.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
+// @downloadURL https://raw.githubusercontent.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
 // @description Exports portals to a CSV list
 // @include https://www.ingress.com/intel*
 // @include http://www.ingress.com/intel*
