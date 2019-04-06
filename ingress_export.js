@@ -2,7 +2,7 @@
 // @id iitc-plugin-ingressportalcsvexport@zetaphor
 // @name IITC Plugin: Ingress Portal CSV Export
 // @category Information
-// @version 0.0.1
+// @version 0.0.5
 // @namespace http://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export
 // @updateURL https://raw.githubusercontent.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
 // @downloadURL https://raw.githubusercontent.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
@@ -104,11 +104,11 @@ function wrapper() {
         var str= "";
         str = title;
         str = str.replace(/\"/g, "\\\"");
-        str = str.replace(";", " ");
-        str = str + ", " + href + ", " + image;
+        str = str.replace(";", "_");
+        str = '"'+str+'"' + "," + href + "," + '"'+image+'"';
         if (window.plugin.keys && (typeof window.portals[portalGuid] !== "undefined")) {
             var keyCount =window.plugin.keys.keys[portalGuid] || 0;
-            str = str + ";" + keyCount;
+            str = str + "," + keyCount;
         }
         return str;
     };
