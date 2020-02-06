@@ -11,8 +11,8 @@
 // @include http://*ingress.com/intel*
 // @match https://*ingress.com/intel*
 // @match http://*ingress.com/intel*
-// @match https://inter.ingress.com/*
-// @match http://inter.ingress.com/*
+// @match https://intel.ingress.com/*
+// @match http://intel.ingress.com/*
 // @grant none
 // ==/UserScript==
 /*global $:false */
