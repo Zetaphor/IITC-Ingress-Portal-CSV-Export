@@ -7,16 +7,12 @@
 // @updateURL https://raw.githubusercontent.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
 // @downloadURL https://raw.githubusercontent.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
 // @description Exports portals to a CSV list
-// @include https://www.ingress.com/intel*
-// @include http://www.ingress.com/intel*
-// @include https://ingress.com/intel*
-// @include http://ingress.com/intel*
-// @include https://intel.ingress.com/intel*
-// @include http://intel.ingress.com/intel*
-// @match https://www.ingress.com/intel*
-// @match http://www.ingress.com/intel*
-// @match https://ingress.com/intel*
-// @match http://ingress.com/intel*
+// @include https://*ingress.com/intel*
+// @include http://*ingress.com/intel*
+// @match https://*ingress.com/intel*
+// @match http://*ingress.com/intel*
+// @match https://intel.ingress.com/*
+// @match http://intel.ingress.com/*
 // @grant none
 // ==/UserScript==
 /*global $:false */
