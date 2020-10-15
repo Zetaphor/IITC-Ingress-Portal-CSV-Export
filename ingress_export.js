@@ -99,7 +99,7 @@ function wrapper() {
         var href = lat + "," + lng;
         var str= "";
         str = title;
-        str = str.replace(/\"/g, "\\\"");
+        str = str.replace(/\"/g, "\"\"");
         str = str.replace(";", "_");
         str = '"'+str+'"' + "," + href + "," + '"'+image+'"';
         if (window.plugin.keys && (typeof window.portals[portalGuid] !== "undefined")) {
